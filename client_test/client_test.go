@@ -88,5 +88,6 @@ func TestListConnectedUsersAndRelayMessage(t *testing.T) {
 	if err := stream.Send(&request); err != nil {
 		t.Error(err)
 	}
+	t.Log("relayed message to server")
 	ctx.Done()
 }
