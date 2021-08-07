@@ -29,16 +29,18 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type GetIdentityRequest struct {
+type MessageRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Message string `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+	UserIDs []uint64 `protobuf:"varint,1,rep,packed,name=UserIDs,proto3" json:"UserIDs,omitempty"`
+	Message string   `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	Type    string   `protobuf:"bytes,3,opt,name=Type,proto3" json:"Type,omitempty"`
 }
 
-func (x *GetIdentityRequest) Reset() {
-	*x = GetIdentityRequest{}
+func (x *MessageRequest) Reset() {
+	*x = MessageRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_message_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -46,13 +48,13 @@ func (x *GetIdentityRequest) Reset() {
 	}
 }
 
-func (x *GetIdentityRequest) String() string {
+func (x *MessageRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetIdentityRequest) ProtoMessage() {}
+func (*MessageRequest) ProtoMessage() {}
 
-func (x *GetIdentityRequest) ProtoReflect() protoreflect.Message {
+func (x *MessageRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_message_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -64,28 +66,43 @@ func (x *GetIdentityRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetIdentityRequest.ProtoReflect.Descriptor instead.
-func (*GetIdentityRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use MessageRequest.ProtoReflect.Descriptor instead.
+func (*MessageRequest) Descriptor() ([]byte, []int) {
 	return file_proto_message_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GetIdentityRequest) GetMessage() string {
+func (x *MessageRequest) GetUserIDs() []uint64 {
+	if x != nil {
+		return x.UserIDs
+	}
+	return nil
+}
+
+func (x *MessageRequest) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
 	return ""
 }
 
-type GetIdentityResponse struct {
+func (x *MessageRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+type MessageResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserID string `protobuf:"bytes,1,opt,name=UserID,proto3" json:"UserID,omitempty"`
+	UserIDs []uint64 `protobuf:"varint,1,rep,packed,name=UserIDs,proto3" json:"UserIDs,omitempty"`
+	Message string   `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
 }
 
-func (x *GetIdentityResponse) Reset() {
-	*x = GetIdentityResponse{}
+func (x *MessageResponse) Reset() {
+	*x = MessageResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_proto_message_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -93,13 +110,13 @@ func (x *GetIdentityResponse) Reset() {
 	}
 }
 
-func (x *GetIdentityResponse) String() string {
+func (x *MessageResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetIdentityResponse) ProtoMessage() {}
+func (*MessageResponse) ProtoMessage() {}
 
-func (x *GetIdentityResponse) ProtoReflect() protoreflect.Message {
+func (x *MessageResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_message_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -111,208 +128,19 @@ func (x *GetIdentityResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetIdentityResponse.ProtoReflect.Descriptor instead.
-func (*GetIdentityResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MessageResponse.ProtoReflect.Descriptor instead.
+func (*MessageResponse) Descriptor() ([]byte, []int) {
 	return file_proto_message_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetIdentityResponse) GetUserID() string {
+func (x *MessageResponse) GetUserIDs() []uint64 {
 	if x != nil {
-		return x.UserID
-	}
-	return ""
-}
-
-type ListConnectedUsersRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Message string `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
-}
-
-func (x *ListConnectedUsersRequest) Reset() {
-	*x = ListConnectedUsersRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_message_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListConnectedUsersRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListConnectedUsersRequest) ProtoMessage() {}
-
-func (x *ListConnectedUsersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_message_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListConnectedUsersRequest.ProtoReflect.Descriptor instead.
-func (*ListConnectedUsersRequest) Descriptor() ([]byte, []int) {
-	return file_proto_message_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ListConnectedUsersRequest) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-type ListConnectedUsersResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	UserID []string `protobuf:"bytes,1,rep,name=UserID,proto3" json:"UserID,omitempty"`
-}
-
-func (x *ListConnectedUsersResponse) Reset() {
-	*x = ListConnectedUsersResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_message_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ListConnectedUsersResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListConnectedUsersResponse) ProtoMessage() {}
-
-func (x *ListConnectedUsersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_message_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListConnectedUsersResponse.ProtoReflect.Descriptor instead.
-func (*ListConnectedUsersResponse) Descriptor() ([]byte, []int) {
-	return file_proto_message_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *ListConnectedUsersResponse) GetUserID() []string {
-	if x != nil {
-		return x.UserID
+		return x.UserIDs
 	}
 	return nil
 }
 
-type RelayMessageRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	UserID  []string `protobuf:"bytes,1,rep,name=UserID,proto3" json:"UserID,omitempty"`
-	Message string   `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-}
-
-func (x *RelayMessageRequest) Reset() {
-	*x = RelayMessageRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_message_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RelayMessageRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RelayMessageRequest) ProtoMessage() {}
-
-func (x *RelayMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_message_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RelayMessageRequest.ProtoReflect.Descriptor instead.
-func (*RelayMessageRequest) Descriptor() ([]byte, []int) {
-	return file_proto_message_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *RelayMessageRequest) GetUserID() []string {
-	if x != nil {
-		return x.UserID
-	}
-	return nil
-}
-
-func (x *RelayMessageRequest) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-type RelayMessageResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Message string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
-}
-
-func (x *RelayMessageResponse) Reset() {
-	*x = RelayMessageResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_message_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RelayMessageResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RelayMessageResponse) ProtoMessage() {}
-
-func (x *RelayMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_message_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RelayMessageResponse.ProtoReflect.Descriptor instead.
-func (*RelayMessageResponse) Descriptor() ([]byte, []int) {
-	return file_proto_message_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *RelayMessageResponse) GetMessage() string {
+func (x *MessageResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
@@ -323,46 +151,24 @@ var File_proto_message_proto protoreflect.FileDescriptor
 
 var file_proto_message_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x2e,
-	0x0a, 0x12, 0x47, 0x65, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x2d,
-	0x0a, 0x13, 0x47, 0x65, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x22, 0x35, 0x0a,
-	0x19, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x65, 0x64, 0x55, 0x73,
-	0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73,
-	0x73, 0x61, 0x67, 0x65, 0x22, 0x34, 0x0a, 0x1a, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e,
-	0x65, 0x63, 0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x01, 0x20, 0x03,
-	0x28, 0x09, 0x52, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x22, 0x47, 0x0a, 0x13, 0x52, 0x65,
-	0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x16, 0x0a, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x01, 0x20, 0x03, 0x28,
-	0x09, 0x52, 0x06, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73,
-	0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73,
-	0x61, 0x67, 0x65, 0x22, 0x30, 0x0a, 0x14, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73,
-	0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x8a, 0x02, 0x0a, 0x0e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x49,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x1b, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x47,
-	0x65, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x5d, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63,
-	0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x22, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61,
-	0x67, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x65, 0x64,
-	0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x6d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e, 0x65,
-	0x63, 0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x4f, 0x0a, 0x0c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x12, 0x1c, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61,
-	0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1d, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01,
-	0x30, 0x01, 0x42, 0x0a, 0x5a, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x70, 0x62, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x58,
+	0x0a, 0x0e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x18, 0x0a, 0x07, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x04, 0x52, 0x07, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x54, 0x79, 0x70, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x54, 0x79, 0x70, 0x65, 0x22, 0x45, 0x0a, 0x0f, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x55,
+	0x73, 0x65, 0x72, 0x49, 0x44, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x04, 0x52, 0x07, 0x55, 0x73,
+	0x65, 0x72, 0x49, 0x44, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32,
+	0x56, 0x0a, 0x0e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x12, 0x44, 0x0a, 0x0b, 0x53, 0x65, 0x6e, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x12, 0x17, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x6d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x42, 0x0a, 0x5a, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -377,24 +183,16 @@ func file_proto_message_proto_rawDescGZIP() []byte {
 	return file_proto_message_proto_rawDescData
 }
 
-var file_proto_message_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_message_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_proto_message_proto_goTypes = []interface{}{
-	(*GetIdentityRequest)(nil),         // 0: message.GetIdentityRequest
-	(*GetIdentityResponse)(nil),        // 1: message.GetIdentityResponse
-	(*ListConnectedUsersRequest)(nil),  // 2: message.ListConnectedUsersRequest
-	(*ListConnectedUsersResponse)(nil), // 3: message.ListConnectedUsersResponse
-	(*RelayMessageRequest)(nil),        // 4: message.RelayMessageRequest
-	(*RelayMessageResponse)(nil),       // 5: message.RelayMessageResponse
+	(*MessageRequest)(nil),  // 0: message.MessageRequest
+	(*MessageResponse)(nil), // 1: message.MessageResponse
 }
 var file_proto_message_proto_depIdxs = []int32{
-	0, // 0: message.MessageService.GetIdentity:input_type -> message.GetIdentityRequest
-	2, // 1: message.MessageService.ListConnectedUsers:input_type -> message.ListConnectedUsersRequest
-	4, // 2: message.MessageService.RelayMessage:input_type -> message.RelayMessageRequest
-	1, // 3: message.MessageService.GetIdentity:output_type -> message.GetIdentityResponse
-	3, // 4: message.MessageService.ListConnectedUsers:output_type -> message.ListConnectedUsersResponse
-	5, // 5: message.MessageService.RelayMessage:output_type -> message.RelayMessageResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	0, // 0: message.MessageService.SendMessage:input_type -> message.MessageRequest
+	1, // 1: message.MessageService.SendMessage:output_type -> message.MessageResponse
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -407,7 +205,7 @@ func file_proto_message_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_proto_message_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetIdentityRequest); i {
+			switch v := v.(*MessageRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -419,55 +217,7 @@ func file_proto_message_proto_init() {
 			}
 		}
 		file_proto_message_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetIdentityResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListConnectedUsersRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_message_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListConnectedUsersResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_message_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RelayMessageRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_message_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RelayMessageResponse); i {
+			switch v := v.(*MessageResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -485,7 +235,7 @@ func file_proto_message_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_message_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -511,9 +261,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MessageServiceClient interface {
-	GetIdentity(ctx context.Context, in *GetIdentityRequest, opts ...grpc.CallOption) (*GetIdentityResponse, error)
-	ListConnectedUsers(ctx context.Context, in *ListConnectedUsersRequest, opts ...grpc.CallOption) (*ListConnectedUsersResponse, error)
-	RelayMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_RelayMessageClient, error)
+	SendMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_SendMessageClient, error)
 }
 
 type messageServiceClient struct {
@@ -524,49 +272,31 @@ func NewMessageServiceClient(cc grpc.ClientConnInterface) MessageServiceClient {
 	return &messageServiceClient{cc}
 }
 
-func (c *messageServiceClient) GetIdentity(ctx context.Context, in *GetIdentityRequest, opts ...grpc.CallOption) (*GetIdentityResponse, error) {
-	out := new(GetIdentityResponse)
-	err := c.cc.Invoke(ctx, "/message.MessageService/GetIdentity", in, out, opts...)
+func (c *messageServiceClient) SendMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_SendMessageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_MessageService_serviceDesc.Streams[0], "/message.MessageService/SendMessage", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
-}
-
-func (c *messageServiceClient) ListConnectedUsers(ctx context.Context, in *ListConnectedUsersRequest, opts ...grpc.CallOption) (*ListConnectedUsersResponse, error) {
-	out := new(ListConnectedUsersResponse)
-	err := c.cc.Invoke(ctx, "/message.MessageService/ListConnectedUsers", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *messageServiceClient) RelayMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_RelayMessageClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_MessageService_serviceDesc.Streams[0], "/message.MessageService/RelayMessage", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &messageServiceRelayMessageClient{stream}
+	x := &messageServiceSendMessageClient{stream}
 	return x, nil
 }
 
-type MessageService_RelayMessageClient interface {
-	Send(*RelayMessageRequest) error
-	Recv() (*RelayMessageResponse, error)
+type MessageService_SendMessageClient interface {
+	Send(*MessageRequest) error
+	Recv() (*MessageResponse, error)
 	grpc.ClientStream
 }
 
-type messageServiceRelayMessageClient struct {
+type messageServiceSendMessageClient struct {
 	grpc.ClientStream
 }
 
-func (x *messageServiceRelayMessageClient) Send(m *RelayMessageRequest) error {
+func (x *messageServiceSendMessageClient) Send(m *MessageRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *messageServiceRelayMessageClient) Recv() (*RelayMessageResponse, error) {
-	m := new(RelayMessageResponse)
+func (x *messageServiceSendMessageClient) Recv() (*MessageResponse, error) {
+	m := new(MessageResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -575,85 +305,41 @@ func (x *messageServiceRelayMessageClient) Recv() (*RelayMessageResponse, error)
 
 // MessageServiceServer is the server API for MessageService service.
 type MessageServiceServer interface {
-	GetIdentity(context.Context, *GetIdentityRequest) (*GetIdentityResponse, error)
-	ListConnectedUsers(context.Context, *ListConnectedUsersRequest) (*ListConnectedUsersResponse, error)
-	RelayMessage(MessageService_RelayMessageServer) error
+	SendMessage(MessageService_SendMessageServer) error
 }
 
 // UnimplementedMessageServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedMessageServiceServer struct {
 }
 
-func (*UnimplementedMessageServiceServer) GetIdentity(context.Context, *GetIdentityRequest) (*GetIdentityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetIdentity not implemented")
-}
-func (*UnimplementedMessageServiceServer) ListConnectedUsers(context.Context, *ListConnectedUsersRequest) (*ListConnectedUsersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListConnectedUsers not implemented")
-}
-func (*UnimplementedMessageServiceServer) RelayMessage(MessageService_RelayMessageServer) error {
-	return status.Errorf(codes.Unimplemented, "method RelayMessage not implemented")
+func (*UnimplementedMessageServiceServer) SendMessage(MessageService_SendMessageServer) error {
+	return status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
 }
 
 func RegisterMessageServiceServer(s *grpc.Server, srv MessageServiceServer) {
 	s.RegisterService(&_MessageService_serviceDesc, srv)
 }
 
-func _MessageService_GetIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIdentityRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MessageServiceServer).GetIdentity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/message.MessageService/GetIdentity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessageServiceServer).GetIdentity(ctx, req.(*GetIdentityRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _MessageService_SendMessage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MessageServiceServer).SendMessage(&messageServiceSendMessageServer{stream})
 }
 
-func _MessageService_ListConnectedUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListConnectedUsersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MessageServiceServer).ListConnectedUsers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/message.MessageService/ListConnectedUsers",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessageServiceServer).ListConnectedUsers(ctx, req.(*ListConnectedUsersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MessageService_RelayMessage_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MessageServiceServer).RelayMessage(&messageServiceRelayMessageServer{stream})
-}
-
-type MessageService_RelayMessageServer interface {
-	Send(*RelayMessageResponse) error
-	Recv() (*RelayMessageRequest, error)
+type MessageService_SendMessageServer interface {
+	Send(*MessageResponse) error
+	Recv() (*MessageRequest, error)
 	grpc.ServerStream
 }
 
-type messageServiceRelayMessageServer struct {
+type messageServiceSendMessageServer struct {
 	grpc.ServerStream
 }
 
-func (x *messageServiceRelayMessageServer) Send(m *RelayMessageResponse) error {
+func (x *messageServiceSendMessageServer) Send(m *MessageResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *messageServiceRelayMessageServer) Recv() (*RelayMessageRequest, error) {
-	m := new(RelayMessageRequest)
+func (x *messageServiceSendMessageServer) Recv() (*MessageRequest, error) {
+	m := new(MessageRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -663,20 +349,11 @@ func (x *messageServiceRelayMessageServer) Recv() (*RelayMessageRequest, error) 
 var _MessageService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "message.MessageService",
 	HandlerType: (*MessageServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetIdentity",
-			Handler:    _MessageService_GetIdentity_Handler,
-		},
-		{
-			MethodName: "ListConnectedUsers",
-			Handler:    _MessageService_ListConnectedUsers_Handler,
-		},
-	},
+	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "RelayMessage",
-			Handler:       _MessageService_RelayMessage_Handler,
+			StreamName:    "SendMessage",
+			Handler:       _MessageService_SendMessage_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

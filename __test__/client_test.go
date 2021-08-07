@@ -20,7 +20,7 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 	return lis.Dial()
 }
 
-// New Storage Client Connection Created
+// New Hub Client Connection Created
 func newClient() pb.MessageServiceClient {
 	ctx := context.Background()
 	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
@@ -34,48 +34,8 @@ func newClient() pb.MessageServiceClient {
 func TestGetIdentity(t *testing.T) {
 	client := newClient()
 
-	mockData := mockMessage{
-		Message: "Who Am I",
-	}
-
-	req := &pb.GetIdentityRequest{
-		Message: mockData.Message,
-	}
-
-	res, err := client.GetIdentity(context.Background(), req)
-	if err != nil {
-		t.Error(err)
-	}
-	if res.UserID != "userID" {
-		t.Errorf("%v is not equal to %v", res, req)
-	}
-}
-
-func TestListConnectedUsers(t *testing.T) {
-	client := newClient()
-
-	mockData := mockMessage{
-		Message: "Who is Here",
-	}
-
-	req := &pb.ListConnectedUsersRequest{
-		Message: mockData.Message,
-	}
-
-	res, err := client.ListConnectedUsers(context.Background(), req)
-	if err != nil {
-		t.Error(err)
-	}
-	if len(res.UserID) != 2 {
-		t.Errorf("%v is not equal to %v", res, req)
-	}
-}
-
-func TestRelayMessage(t *testing.T) {
-	client := newClient()
-
 	// create stream
-	stream, err := client.RelayMessage(context.Background())
+	stream, err := client.SendMessage(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,7 +43,65 @@ func TestRelayMessage(t *testing.T) {
 	ctx := stream.Context()
 
 	// Send Message to stream
-	req := pb.RelayMessageRequest{UserID: []string{"1", "2"}, Message: "foobar"}
+	req := pb.MessageRequest{Message: "Who Am I", Type: "identity"}
+	if err := stream.Send(&req); err != nil {
+		t.Error(err)
+	}
+
+	// check if message is received and close the stream
+	resp, err := stream.Recv()
+	if err == io.EOF {
+		t.Error(err)
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	log.Printf("new message %s received", resp.Message)
+	ctx.Done()
+}
+
+func TestListConnectedUsers(t *testing.T) {
+	client := newClient()
+
+	// create stream
+	stream, err := client.SendMessage(context.Background())
+	if err != nil {
+		t.Error(err)
+	}
+
+	ctx := stream.Context()
+
+	// Send Message to stream
+	req := pb.MessageRequest{Message: "Who Is Here?", Type: "list"}
+	if err := stream.Send(&req); err != nil {
+		t.Error(err)
+	}
+
+	// check if message is received and close the stream
+	resp, err := stream.Recv()
+	if err == io.EOF {
+		t.Error(err)
+	}
+	if err != nil {
+		t.Error(err)
+	}
+	log.Printf("new message %v received", resp.UserIDs)
+	ctx.Done()
+}
+
+func TestRelayMessage(t *testing.T) {
+	client := newClient()
+
+	// create stream
+	stream, err := client.SendMessage(context.Background())
+	if err != nil {
+		t.Error(err)
+	}
+
+	ctx := stream.Context()
+
+	// Send Message to stream
+	req := pb.MessageRequest{UserIDs: []uint64{1, 2}, Message: "foobar", Type: "relay"}
 	if err := stream.Send(&req); err != nil {
 		t.Error(err)
 	}

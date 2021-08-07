@@ -1,7 +1,6 @@
 package test
 
 import (
-	"context"
 	"errors"
 	"io"
 	"log"
@@ -9,25 +8,12 @@ import (
 )
 
 type mockMessage struct {
+	Type    string
 	Message string
 }
 
-func (s *TestServer) GetIdentity(ctx context.Context, m *pb.GetIdentityRequest) (*pb.GetIdentityResponse, error) {
-	return &pb.GetIdentityResponse{
-		UserID: "userID",
-	}, nil
-}
-
-func (s *TestServer) ListConnectedUsers(ctx context.Context, m *pb.ListConnectedUsersRequest) (*pb.ListConnectedUsersResponse, error) {
-	return &pb.ListConnectedUsersResponse{
-		UserID: []string{
-			"userID",
-			"userID2",
-		},
-	}, nil
-}
-
-func (s *TestServer) RelayMessage(m pb.MessageService_RelayMessageServer) error {
+func (s *TestServer) SendMessage(m pb.MessageService_SendMessageServer) error {
+	mockUsers := []uint64{1, 2}
 	ctx := m.Context()
 	for {
 
@@ -51,17 +37,33 @@ func (s *TestServer) RelayMessage(m pb.MessageService_RelayMessageServer) error 
 			continue
 		}
 
-		// continue if number reveived from stream
-		// less than max
-		if len(req.UserID) == 0 {
-			return errors.New("No user specified")
+		switch req.Type {
+		case "relay":
+			// return if number reveived from stream
+			// less than 0
+			if len(req.UserIDs) == 0 {
+				return errors.New("No user specified")
+			}
+			// send it to stream
+			resp := pb.MessageResponse{Message: req.Message, UserIDs: mockUsers}
+			if err := m.Send(&resp); err != nil {
+				return err
+			}
+			// return nil to only run once
+			return nil
+		case "identity":
+			// send it to stream
+			resp := pb.MessageResponse{Message: "1", UserIDs: []uint64{1}}
+			if err := m.Send(&resp); err != nil {
+				return err
+			}
+			return nil
+		case "list":
+			// send it to stream
+			resp := pb.MessageResponse{UserIDs: mockUsers}
+			if err := m.Send(&resp); err != nil {
+				return err
+			}
 		}
-		// send it to stream
-		resp := pb.RelayMessageResponse{Message: req.Message}
-		if err := m.Send(&resp); err != nil {
-			return err
-		}
-		// return nil to only run once
-		return nil
 	}
 }
