@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package message;
 
-option go_package = "GeneratedProtobuf";
+option go_package = "proto/pb";
 
 message GetIdentityRequest {
     string Message = 1;
