@@ -1,11 +1,11 @@
-package test
+package clienttest
 
 import (
 	"context"
 	"io"
 	"log"
+	"message/hub"
 	"message/proto/pb"
-	"net"
 	"testing"
 
 	"google.golang.org/grpc"
@@ -13,41 +13,30 @@ import (
 
 // Initialize Server Service
 func init() {
-	go MockServer(InitializeMockServer())
+	go hub.NewHubServer(hub.NewHub())
 }
 
-func bufDialer(context.Context, string) (net.Conn, error) {
-	return lis.Dial()
-}
+// TestGetIdentity
+func TestGetIdentity(t *testing.T) {
+	port := ":3030"
 
-// New Hub Client Connection Created
-func newClient() pb.MessageServiceClient {
-	ctx := context.Background()
-	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost"+port, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("failed to Serve: %v", err)
 	}
+
 	client := pb.NewMessageServiceClient(conn)
-	return client
-}
-
-func TestGetIdentity(t *testing.T) {
-	client := newClient()
-
 	// create stream
 	stream, err := client.SendMessage(context.Background())
 	if err != nil {
 		t.Error(err)
 	}
-
 	ctx := stream.Context()
-
 	// Send Message to stream
 	req := pb.MessageRequest{Message: "Who Am I", Type: "identity"}
 	if err := stream.Send(&req); err != nil {
 		t.Error(err)
 	}
-
 	// check if message is received and close the stream
 	resp, err := stream.Recv()
 	if err == io.EOF {
@@ -56,12 +45,20 @@ func TestGetIdentity(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("new message %s received", resp.Message)
+	t.Logf("new message %v received", resp.UserIDs)
 	ctx.Done()
 }
 
-func TestListConnectedUsers(t *testing.T) {
-	client := newClient()
+// TestListConnectedUsers
+func TestListConnectedUsersAndRelayMessage(t *testing.T) {
+	port := ":3030"
+
+	conn, err := grpc.Dial("localhost"+port, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("failed to Serve: %v", err)
+	}
+
+	client := pb.NewMessageServiceClient(conn)
 
 	// create stream
 	stream, err := client.SendMessage(context.Background())
@@ -86,34 +83,10 @@ func TestListConnectedUsers(t *testing.T) {
 		t.Error(err)
 	}
 	t.Logf("new message %v received", resp.UserIDs)
-	ctx.Done()
-}
-
-func TestRelayMessage(t *testing.T) {
-	client := newClient()
-
-	// create stream
-	stream, err := client.SendMessage(context.Background())
-	if err != nil {
-		t.Error(err)
-	}
-
-	ctx := stream.Context()
-
 	// Send Message to stream
-	req := pb.MessageRequest{UserIDs: []uint64{1, 2}, Message: "foobar", Type: "relay"}
-	if err := stream.Send(&req); err != nil {
+	request := pb.MessageRequest{UserIDs: []uint64{1, 2}, Message: "foobar", Type: "relay"}
+	if err := stream.Send(&request); err != nil {
 		t.Error(err)
 	}
-
-	// check if message is received and close the stream
-	resp, err := stream.Recv()
-	if err == io.EOF {
-		t.Error(err)
-	}
-	if err != nil {
-		t.Error(err)
-	}
-	t.Logf("new message %s received", resp.Message)
 	ctx.Done()
 }

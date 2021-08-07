@@ -71,12 +71,6 @@ func (s hub) SendMessage(m pb.MessageService_SendMessageServer) error {
 			continue
 		}
 
-		// continue if number reveived from stream
-		// less than max
-		if len(req.UserIDs) == 0 {
-			continue
-		}
-
 		switch req.Type {
 		case "relay":
 			// return if number reveived from stream
