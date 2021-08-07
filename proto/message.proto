@@ -1,0 +1,37 @@
+syntax = 'proto3';
+
+package message;
+
+option go_package = "GeneratedProtobuf";
+
+message GetIdentityRequest {
+    string Message = 1;
+}
+
+message GetIdentityResponse {
+    string UserID = 1;
+}
+
+message ListConnectedUsersRequest {
+    string Message = 1;
+}
+
+message ListConnectedUsersResponse {
+    repeated string UserID = 1;
+}
+
+message RelayMessageRequest {
+    repeated string UserID = 1;
+    string Message = 2;
+}
+
+message RelayMessageResponse {
+    string Message = 2;
+}
+
+service MessageService {
+    rpc GetIdentity (GetIdentityRequest) returns (GetIdentityResponse);
+    rpc ListConnectedUsers (ListConnectedUsersRequest) returns (ListConnectedUsersResponse); 
+    rpc RelayMessage (RelayMessageRequest) returns (RelayMessageResponse);
+}
+
