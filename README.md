@@ -13,8 +13,8 @@ Go is an errors first language – this approach would be used to write a safe 
 
 ```
 Run Go Test
-*go test ./... -v 
+*make test
 
 Run Go Vet
-*go vet
+*make vet
 ```

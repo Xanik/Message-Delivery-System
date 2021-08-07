@@ -7,3 +7,7 @@ test:
 	cd __test__ && go test ./...
 	@echo "Running client test"
 	go test -v ./... -cover
+
+vet:
+	@echo "Running Go Vet"
+	go vet -v ./...
