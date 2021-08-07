@@ -32,6 +32,6 @@ message RelayMessageResponse {
 service MessageService {
     rpc GetIdentity (GetIdentityRequest) returns (GetIdentityResponse);
     rpc ListConnectedUsers (ListConnectedUsersRequest) returns (ListConnectedUsersResponse); 
-    rpc RelayMessage (RelayMessageRequest) returns (RelayMessageResponse);
+    rpc RelayMessage (stream RelayMessageRequest) returns (stream RelayMessageResponse);
 }
 

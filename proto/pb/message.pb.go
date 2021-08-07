@@ -344,7 +344,7 @@ var file_proto_message_proto_rawDesc = []byte{
 	0x61, 0x67, 0x65, 0x22, 0x30, 0x0a, 0x14, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73,
 	0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x4d,
 	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x4d, 0x65,
-	0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x86, 0x02, 0x0a, 0x0e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x8a, 0x02, 0x0a, 0x0e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x49,
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x1b, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x71,
@@ -356,13 +356,13 @@ var file_proto_message_proto_rawDesc = []byte{
 	0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x6d,
 	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x6e, 0x65,
 	0x63, 0x74, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x12, 0x4f, 0x0a, 0x0c, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x12, 0x1c, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61,
 	0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x1d, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x52, 0x65, 0x6c, 0x61, 0x79, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0a,
-	0x5a, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01,
+	0x30, 0x01, 0x42, 0x0a, 0x5a, 0x08, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x70, 0x62, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -513,7 +513,7 @@ const _ = grpc.SupportPackageIsVersion6
 type MessageServiceClient interface {
 	GetIdentity(ctx context.Context, in *GetIdentityRequest, opts ...grpc.CallOption) (*GetIdentityResponse, error)
 	ListConnectedUsers(ctx context.Context, in *ListConnectedUsersRequest, opts ...grpc.CallOption) (*ListConnectedUsersResponse, error)
-	RelayMessage(ctx context.Context, in *RelayMessageRequest, opts ...grpc.CallOption) (*RelayMessageResponse, error)
+	RelayMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_RelayMessageClient, error)
 }
 
 type messageServiceClient struct {
@@ -542,20 +542,42 @@ func (c *messageServiceClient) ListConnectedUsers(ctx context.Context, in *ListC
 	return out, nil
 }
 
-func (c *messageServiceClient) RelayMessage(ctx context.Context, in *RelayMessageRequest, opts ...grpc.CallOption) (*RelayMessageResponse, error) {
-	out := new(RelayMessageResponse)
-	err := c.cc.Invoke(ctx, "/message.MessageService/RelayMessage", in, out, opts...)
+func (c *messageServiceClient) RelayMessage(ctx context.Context, opts ...grpc.CallOption) (MessageService_RelayMessageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_MessageService_serviceDesc.Streams[0], "/message.MessageService/RelayMessage", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &messageServiceRelayMessageClient{stream}
+	return x, nil
+}
+
+type MessageService_RelayMessageClient interface {
+	Send(*RelayMessageRequest) error
+	Recv() (*RelayMessageResponse, error)
+	grpc.ClientStream
+}
+
+type messageServiceRelayMessageClient struct {
+	grpc.ClientStream
+}
+
+func (x *messageServiceRelayMessageClient) Send(m *RelayMessageRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *messageServiceRelayMessageClient) Recv() (*RelayMessageResponse, error) {
+	m := new(RelayMessageResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // MessageServiceServer is the server API for MessageService service.
 type MessageServiceServer interface {
 	GetIdentity(context.Context, *GetIdentityRequest) (*GetIdentityResponse, error)
 	ListConnectedUsers(context.Context, *ListConnectedUsersRequest) (*ListConnectedUsersResponse, error)
-	RelayMessage(context.Context, *RelayMessageRequest) (*RelayMessageResponse, error)
+	RelayMessage(MessageService_RelayMessageServer) error
 }
 
 // UnimplementedMessageServiceServer can be embedded to have forward compatible implementations.
@@ -568,8 +590,8 @@ func (*UnimplementedMessageServiceServer) GetIdentity(context.Context, *GetIdent
 func (*UnimplementedMessageServiceServer) ListConnectedUsers(context.Context, *ListConnectedUsersRequest) (*ListConnectedUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListConnectedUsers not implemented")
 }
-func (*UnimplementedMessageServiceServer) RelayMessage(context.Context, *RelayMessageRequest) (*RelayMessageResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RelayMessage not implemented")
+func (*UnimplementedMessageServiceServer) RelayMessage(MessageService_RelayMessageServer) error {
+	return status.Errorf(codes.Unimplemented, "method RelayMessage not implemented")
 }
 
 func RegisterMessageServiceServer(s *grpc.Server, srv MessageServiceServer) {
@@ -612,22 +634,30 @@ func _MessageService_ListConnectedUsers_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MessageService_RelayMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RelayMessageRequest)
-	if err := dec(in); err != nil {
+func _MessageService_RelayMessage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MessageServiceServer).RelayMessage(&messageServiceRelayMessageServer{stream})
+}
+
+type MessageService_RelayMessageServer interface {
+	Send(*RelayMessageResponse) error
+	Recv() (*RelayMessageRequest, error)
+	grpc.ServerStream
+}
+
+type messageServiceRelayMessageServer struct {
+	grpc.ServerStream
+}
+
+func (x *messageServiceRelayMessageServer) Send(m *RelayMessageResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *messageServiceRelayMessageServer) Recv() (*RelayMessageRequest, error) {
+	m := new(RelayMessageRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(MessageServiceServer).RelayMessage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/message.MessageService/RelayMessage",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessageServiceServer).RelayMessage(ctx, req.(*RelayMessageRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 var _MessageService_serviceDesc = grpc.ServiceDesc{
@@ -642,11 +672,14 @@ var _MessageService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "ListConnectedUsers",
 			Handler:    _MessageService_ListConnectedUsers_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "RelayMessage",
-			Handler:    _MessageService_RelayMessage_Handler,
+			StreamName:    "RelayMessage",
+			Handler:       _MessageService_RelayMessage_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/message.proto",
 }
