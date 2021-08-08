@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
-	"message/hub"
+	"message/hub_test"
 	"message/proto/pb"
 	"testing"
 
@@ -13,7 +13,7 @@ import (
 
 // Initialize Server Service
 func init() {
-	go hub.NewHubServer(hub.NewHub())
+	go hub_test.NewHubServer(hub_test.NewHub())
 }
 
 // TestGetIdentity

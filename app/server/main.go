@@ -1,4 +1,4 @@
-package hub
+package main
 
 import (
 	"io"
@@ -13,12 +13,15 @@ import (
 )
 
 // New Hub Server Connection Created
-func NewHubServer(server pb.MessageServiceServer) {
+func main() {
 	port := ":3030"
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to Listen: %v", err)
 	}
+
+	server := NewHub()
+
 	s := grpc.NewServer()
 
 	pb.RegisterMessageServiceServer(s, server)
@@ -36,17 +39,18 @@ type hub struct {
 	store map[pb.MessageService_SendMessageServer]uint64
 }
 
-//Initialized a constructor  Of hub struct
-func NewHub() *hub {
-	return &hub{mutex: &sync.RWMutex{}, store: make(map[pb.MessageService_SendMessageServer]uint64)}
-}
-
 //Generate Ascending UserIDs
 func (s hub) generateID() uint64 {
 	UserIDs := uint64(rand.Intn(1000))
 	return UserIDs
 }
 
+//Initialized a constructor  Of hub struct
+func NewHub() *hub {
+	return &hub{mutex: &sync.RWMutex{}, store: make(map[pb.MessageService_SendMessageServer]uint64)}
+}
+
+// SendMessage Listens for sendmessage stream from the server
 func (s hub) SendMessage(m pb.MessageService_SendMessageServer) error {
 	ctx := m.Context()
 	for {
@@ -68,11 +72,23 @@ func (s hub) SendMessage(m pb.MessageService_SendMessageServer) error {
 		}
 		if err != nil {
 			log.Printf("receive error %v", err)
+			delete(s.store, m)
 			continue
 		}
 
 		switch req.Type {
 		case "relay":
+			// check stream and store stream if new
+			s.mutex.RLock()
+			_, ok := s.store[m]
+			s.mutex.RUnlock()
+
+			if !ok {
+				key := s.generateID()
+				s.mutex.Lock()
+				s.store[m] = key
+				s.mutex.Unlock()
+			}
 			// return if number reveived from stream
 			// less than 0
 			if len(req.UserIDs) == 0 {
@@ -91,7 +107,7 @@ func (s hub) SendMessage(m pb.MessageService_SendMessageServer) error {
 				}
 			}
 		case "identity":
-			// send it to stream
+			// check stream and store stream if new
 			s.mutex.RLock()
 			data, ok := s.store[m]
 			s.mutex.RUnlock()
@@ -108,10 +124,22 @@ func (s hub) SendMessage(m pb.MessageService_SendMessageServer) error {
 				log.Println(err.Error())
 			}
 		case "list":
+			// check stream and store stream if new
+			s.mutex.RLock()
+			_, ok := s.store[m]
+			s.mutex.RUnlock()
+
+			if !ok {
+				key := s.generateID()
+				s.mutex.Lock()
+				s.store[m] = key
+				s.mutex.Unlock()
+			}
+
 			s.mutex.RLock()
 			if len(s.store) == 0 {
 				log.Println(models.Message(models.UsersNotFound))
-				s.mutex.RUnlock()
+				continue
 			}
 			users := []uint64{}
 
